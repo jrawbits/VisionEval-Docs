@@ -25,28 +25,35 @@ models with local data, running scenarios, and extracting and analyzing results.
 VisionEval runs within the R Statistical Environment on any system for which R
 is available. There are two paths to installing VisionEval:
 
-1.  **Install from the stand-alone Windows installer**:
+1.  **Use the installation script**:
 
-    1.  [Download a zipped
-        folder](https://visioneval.org/category/download.html) from the
-        VisionEval website for a specific version of R.  
-        This is the simplest way to quickly get VisionEval on your computer.
+    This is the simplest way to quickly get VisionEval on your computer.
 
-2.  **Copy or clone the system code repository**:
+    1.  Install a recent version of R (see [pre-requisites](#pre-requisites) below),
+        then start R, change the R working directory to a new empty folder, and
+        copy this line into the R console:
+        ```
+        source(ve.url<-"https://visioneval.github.io/assets/install/VE4-install.R")
+        ```
+        If you just click through the defaults in the dialogs that appear, you'll
+        get a running version of the latest release of VisionEval. Details later on
+        this page explain how to customize your installation to support developing and
+        running your own model version.
 
-    1.  If you area a Mac/Linux user, or if you are interested in contributing
-        to the development of VisionEval modules, models, framework, or
-        visualizer, choose this path.
+2.  **Copy or clone the Github code repository**:
 
-    2.  The most recent stable release is hosted at [VisionEval on
-        **GitHub**](https://visioneval.github.io). Development releases are
-        available at
-        [VisionEval-dev](https://visioneval/VisionEval-Dev/releases). Once you
-        have downloaded or cloned one of the VisionEval repositories, you will
-        need to build it before you can run it.
+    1.  You can copy a snapshot of the VisionEval code repository using the installation
+        script.
+    2.  Alternatively, you can clone the VisionEval Github repository (you don't need to
+        "fork" the repository unless you're planning to contribute changes to main
+        VisionEval code using Github's "pull request" mechanism).
+    2.  The Github repository is [`VisionEval-4`](https://github.com/VisionEval/VisionEval-4).Once you
+        have downloaded or cloned the VisionEval repository, you will
+        need to build the VisionEval R packages before you can run models.
+        Full instructions are provided below.
 
-Detailed setup instructions on setting up the VisionEval runtime, or building VisionEval from the source code, can be
-found in on the [Detailed Installation Instructions](#detailed-installation) page.
+Detailed step-by-step setup instructions on setting up the VisionEval runtime, or building VisionEval from the source
+code, can be found in on the [Detailed Installation Instructions](#detailed-installation) page.
 
 ## Installation and Setup
 
@@ -54,59 +61,107 @@ found in on the [Detailed Installation Instructions](#detailed-installation) pag
 
 You will need:
 
--   [R, at least version 4.1.3](https://cran.r-project.org)
+-   [R, at least version 4.4.3](https://cran.r-project.org)
 
--   [RStudio](https://www.rstudio.com/products/rstudio/download/)
+-   Optionally: [RStudio](https://www.rstudio.com/products/rstudio/download/)
 
-Once you have R and RStudio installed, you can retrieve the VisionEval
-installer itself. RStudio is optional. Read on for information about
-how to run VisionEval within the base R GUI.
+Once you have R installed, you can run the VisionEval installer (RStudio is optional but many people find it useful for
+managing the R environment).
+
+VisionEval currently only has build support for Microsoft Windows. In principle, it will run on any operating system for
+which R is available (meaning for Apple Macintosh or the main Linux distributions). However, building VisionEval for
+those systems will require installing a series of operating system support packages that are typically not available by
+default. An open development issue is to add automatic support for installing those packages; this documentation will
+be updated once that work is complete.
 
 #### Installer
 
-[Get VisionEval Here](https://visioneval.github.io/category/download.html)
+Currently, VisionEval will run on any R version in the 4.4.x or 4.5.x series.
 
-*Note: 580 Mb download! Pick the version corresponding to your R installation
-(4.1.3, 4.2.3, 4.3.2, etc).*
+You can retrieve the current binary release of VisionEval by running the installation script as described here
+(and [available on the website](https://visioneval.github.io/category/download.html)).
 
-The link above will download a .zip file containing the following:
+Start your selected version of R (using the built-in RGui or RStudio, either will work), 
+then copy the following line into your R console:
 
--   The VisionEval framework code and sample models
-
--   All necessary R packages
-
--   Documentation (both this book as well as API documentation)
-
-Unzip that file into an empty folder of your choice (e.g. `C:\VisionEval`).
-
-#### Completing the Installation
-
-To complete the installation and start VisionEval, do this:
-
-1.  Navigate to the folder into which you unzipped the installer:
-
-2.  Double-click `VisionEval.Rproj`
-
-RStudio will start, and VisionEval will load. You should see a message
-similar to the following in the RStudio Console:
-
-```
-Loading VisionEval for R4.3.2
-Loading required package: VEModel
-Welcome to the new VisionEval!
-Running in C:/VisionEval
+```R
+source(ve.url<-"https://visioneval.github.io/assets/install/VE4-install.R")
 ```
 
-If the `VisionEval.Rproj` file does not open RStudio when you double-click it,
-you can start RStudio directly, then choose `File / Open Project...` and get to
-the same place. By default, RStudio remembers the project you last loaded, so
-having done that once you should get back to VisionEval each time you start
-RStudio (unless you work on a different project).
+When the script starts, the first thing you should do is to "Change VE_HOME" to a suitable location.
+VE_HOME is where your VisionEval will be installed and it should be an empty folder. If you don't
+have one ready, you can create one when you push the "Change VE_HOME" button. Beware that the default
+suggested if you are starting fresh is usually NOT appropriate.
 
-#### Starting VisionEval Manually
+See below for further details (or you can select the defaults on the remaining installation screens).
 
-If you need to start VisionEval manually for some reason, just start RStudio (or
-even plain R), change into your installation folder using
+**GORY DETAIL** The most up-to-date installer scripts can be found within the Github source tree in
+[`sources/framework/VEStart/inst/download`](https://github.com/VisionEval/VisionEval-4/tree/release/sources/framework/VEStart/inst/download)
+, or within the `download` folder of the installed VEStart package, which you can locate with the R command
+`system.file("download",package="VEStart")`
+
+**ADDITIONAL GORY DETAIL** The mysterious `ve.url<-` incantation enables some tcltk dialogs (in file
+`VE4-UI-tcltk.R`) stored in a separate script file that give you flexibility in using releases other
+than the most current, or in downloading a snapshot of the full VisionEval code without using Git so
+you can build the entire system locally. If you leave it out, you'll get a forced installation in your current
+R working folder with the latest binary release.
+
+When the installation is complete, VisionEval will automatically start with your selected runtime
+directory as the R working directory. And you will see a startup message indicating that you are
+running VisionEval (your version of R may differ):
+
+```
+R version 4.5.2 (2025-10-31 ucrt) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+If VisionEval does not start automatically, please run this command:
+startVisionEval()
+Setting up VE_RUNTIME as N:/VisionEval
+Adding startup files to N:/VisionEval
+Welcome to VisionEval 4.0!
+Running in N:/VisionEval
+> 
+```
+
+From there, you can explore the
+[tutorial instructions](https://visioneval.github.io/docs/getting-started.html#workflow-of-visioneval)
+later in this documentation.
+
+#### Starting VisionEval once it is installed
+
+Once you have installed VisionEval, to start it again follow these steps:
+
+1. Navigate to the folder in which you installed VisionEval (technically, VE_HOME or VE_RUNTIME, explained below).
+
+2. Double-click `VisionEval.Rproj`, if you have RStudio installed. This will start whatever R version
+   you have told RStudio to use (defaulting to the most recently installed version of R). That has to be
+   the same as the R version you used to run the installation script.
+
+3. Double click `launch_R4.5.2.bat`, if you don't have RStudio or just want to use the standard R GUI.
+   (The numbers in the `launch_Rx.y.z.bat` file name will match the version of R with which you
+   installed VisionEval). There may be several `launch` files if you have installed VisionEval for
+   different R versions in the same VE_HOME directory (something that will work, though it is not
+   recommended to avoid confusion).   
+
+#### Starting VisionEval from within R
+
+If you need to start VisionEval from within R for some reason (e.g. you started R or RStudio from the Windows
+Start Menu and it is not set to use your VisionEval folder), just change into your VisionEval folder using
 
 -   RStudio's `Session / Set Working Directory...` menu option, or
 
@@ -116,60 +171,22 @@ even plain R), change into your installation folder using
 Then run this instruction to start VisionEval:
 
 ```
-source("VisionEval.R")
+source(".Rprofile")
 ```
 
-#### Starting VisionEval from the RGUI
+You should then be running VisionEval (Look for the message `Loading VisionEval 4.0!`.
 
-RStudio is not mandatory for using VisionEval. It is also possible to run
-VisionEval within the RGUI that comes with R. You will need to do that if you
-have no administrative rights on your machine, since RStudio requires
-administrative permissions to install.
-
-To run without RStudio, double-click the `launch.bat` batch file (from Windows Explorer).
-
-If you have installed R manually, you may need to set the R_HOME environment variable for `launch.bat` to work. You'll
-know if that's a problem if you get a message about the wrong version or R, or a batch file message saying that R cannot
-be found, or a Window briefly opens and then shuts without starting R.
-
-To find the proper value for R_HOME, start the version of R for which you have
-installed VisionEval (it should be on the Windows start menu even if you did a
-non-administrative installation). Then run this R command:
-
-```R
-R.home()
-```
-
-You get a string that should look something like this:
-
-```
-[1] "C:/PROGRA~1/R/R-43~1.2"
-```
-
-You want to copy the part inside the quotes that says `C:/PROGRA~1/R/R-43~1.2`
-
-Put that value into a
-[User Environment Variable](https://learn.microsoft.com/en-us/windows/win32/shell/user-environment-variables)
-called `R_HOME` or you can edit it into `launch.bat` itself by replacing the default R_HOME value in that file. Edit
-`launch.bat` with a text editor (or - ugh - Notepad) and it should be reasonably obvious what to do.
-
-If `launch.bat` is working, an RGUI instance should open and you should see the same startup message that appears in RStudio:
-
-```
-Loading VisionEval for R4.3.2
-Loading required package: VEModel
-Welcome to the new VisionEval!
-Running in C:/VisionEval
-```
+If that doesn't work, check that your R working directory is correct, and that VisionEval has actually been installed in
+that directory. If you still have trouble, try re-installing VisionEval using the instructions above.
 
 ## Workflow of VisionEval
 
 VisionEval models and the underlying software framework are written in the
-[R programming language](https://www.r-project.org) for statistical computing and graphics. The purpose of the model
-system and framework is to enable models be created in a plug-and-play fashion from modules that are distributed as R
-packages. A simple R script is used to implement a model by initializing the model environment and then calling modules
-successively. Scenarios are then constructed through a set of files that provide variant model inputs for evaluation and
-comparison.
+[R programming language](https://www.r-project.org) for statistical computing and graphics.
+The purpose of the model system and framework is to enable models be created in a plug-and-play fashion from VisionEval
+modules that are distributed as R packages. A simple R script is used to implement a model by initializing the model
+environment and then calling modules successively. Scenarios are then constructed through a set of files that provide
+variant model inputs for evaluation and comparison.
 
 To use VisionEval to evaluate scenarios, there are several elements that users
 need to set up:
@@ -181,11 +198,11 @@ need to set up:
     1.  [VERSPM](https://github.com/VisionEval/VisionEval-Dev/blob/readme-dev/docs/tutorials/verspm/Main.md)
         – Regional Strategic Planning Model
 
-    2.  [VERPAT](https://github.com/VisionEval/VisionEval/wiki/VERPAT-Tutorial-Overview)
-        – Rapid Policy Analysis Tool
-
-    3.  [VE-State](https://github.com/VisionEval/VisionEval/wiki/VE-State-Status)
+    2.  [VE-State](https://github.com/VisionEval/VisionEval/wiki/VE-State-Status)
         – VisionEval State-Level Model
+
+    2.  **Currently not Supported** [VERPAT](https://github.com/VisionEval/VisionEval/wiki/VERPAT-Tutorial-Overview)
+        – Rapid Policy Analysis Tool
 
 2.  Develop a *Base Model* for the region under analysis. The Base Model
     specifies:
@@ -210,9 +227,10 @@ need to set up:
 4.  Run the model to process each of its scenarios.
 
 5.  Extract or query the results for summarization and further analysis in R or
-    export tabular data files to other data analysis systems.
+    export tabular data files to other data analysis systems (including spreadsheets
+    or SQL databases).
 
-These steps are described on other pages of this documentation.
+These steps are described in detail on other pages of this documentation.
 
 ## Editing and Running Models
 
@@ -234,8 +252,8 @@ contains the following components:
     useful metrics from the model scenarios once they have run
 
 -   Additional optional folders for the model scenarios (either as top-level
-    directories or within the `/scenarios` sub-folder, which describe
-    deviations from the Base Model). Scenarios may have different
+    directories or within the `/scenarios` sub-folder), which describe
+    deviations from the Base Model. Scenarios may have different
     inputs or a different model script.
 
 Once any of the model scenarios have been run, the model will also have a
@@ -259,9 +277,8 @@ The tutorials later in this book will explain how to select and customize one of
 the VisionEval models, as well as how to develop inputs and create scenarios for
 your area.
 
-Once you have received the `Welcome to the new VisionEval!` message, you can try
-things out by copying or entering the following instructions into the R Console
-window:
+Once VisionEval is running in an R or Rstudio console, you can try things out by copying or entering
+the following instructions into the R Console window:
 
 ```
 rspm <- installModel("VERSPM")
@@ -319,16 +336,18 @@ The instructions will do the following:
 Additional features of the VisionEval R interface are somewhat systematically explored in commented R scripts located in
 the VisionEval runtime `VisionEval/walkthrough` folder. The walkthrough files are most easily explored using RStudio.
 
-Once you have seen the message "Welcome to the new VisionEval", you can set up
-the walkthrough by running this instruction:
+Once VisionEval is running, you can set up the walkthrough by running this instruction:
 
 ```
-walkthrough()
+ve.walkthrough()
 ```
 
 The walkthrough will create a special runtime directory (within your main
 runtime folder), so nothing you do while trying it out will affect any of your
 "real" models, which will remain untouched in your "models" directory.
+
+It will also print the path of a folder that you can use in RStudio (or copy into
+Windows Explorer) to see the walkthrough script files.
 
 To explore any of the walkthrough scripts:
 
